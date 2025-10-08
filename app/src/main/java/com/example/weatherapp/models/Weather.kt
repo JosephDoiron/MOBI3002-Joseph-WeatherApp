@@ -10,23 +10,23 @@ data class Weather(
 data class Current(
     val image: Int,
     val condition: String,
-    val temperature: Double,
+    val temperature: Int,
     val precipType: String,
     val precipAmount: Double,
     val windDirect: String,
-    val windSpeed: Double
+    val windSpeed: Int
 )
 
 data class Forecast(
     val date: String,
     val image: Int,
-    val tempHigh: Double,
-    val tempLow: Double,
+    val tempHigh: Int,
+    val tempLow: Int,
     val condition: String,
     val precipType: String,
     val precipAmount: Double,
     val precipProb: Int,
     val windDirect: String,
-    val windSpeed: Double,
+    val windSpeed: Int,
     val humidity: Int
 )

@@ -31,15 +31,19 @@ import com.example.weatherapp.ui.theme.screens.CurrentWeatherScreen
 import com.example.weatherapp.ui.theme.screens.DailyForecastScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.activity.viewModels
+import com.example.weatherapp.viewmodel.MainViewModel
+
 
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-                DisplayUI()
+                DisplayUI(mainViewModel)
             }
         }
     }
@@ -47,7 +51,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayUI() {
+fun DisplayUI(mainViewModel: MainViewModel) {
     val navController = rememberNavController()
 
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -116,33 +120,14 @@ fun DisplayUI() {
         )
         {
             composable(route = "currentWeather") {
-                CurrentWeatherScreen()
+                CurrentWeatherScreen(mainViewModel)
             }
 
             composable(route = "dailyForecast"){
-                DailyForecastScreen()
+                DailyForecastScreen(mainViewModel)
             }
 
         }
     }
 
-}
-
-
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WeatherAppTheme {
-        Greeting("Android")
-    }
 }

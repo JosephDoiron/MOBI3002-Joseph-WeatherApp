@@ -28,26 +28,67 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.ui.theme.components.BackgroundImage
+import com.example.weatherapp.viewmodel.MainViewModel
 
 
 @Composable
-fun CurrentWeatherScreen(
-) {
+fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
+    val weather = mainViewModel.weather
+    val current = mainViewModel.weather.current
+
     BackgroundImage()
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // This Box groups the temperature and condition together visually
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.50f))
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.Center
         ) {
-            // Middle temperature
-            Text(
-                text = "17\u00B0C",
-                fontSize = 90.sp,
-                color = Color.White,
-                modifier = Modifier.background(Color.Black.copy(alpha = 0.25f))
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "${current.temperature}\u00B0C",
+                    fontSize = 90.sp,
+                    color = Color.White
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(top = 1.dp)
+                ) {
+                    Text(
+                        text = current.condition,
+                        fontSize = 28.sp,
+                        color = Color.White
+                    )
+                    Image(
+                        painter = painterResource(id = current.image),
+                        contentDescription = current.condition,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .fillMaxWidth(0.13f)
+                    )
+                }
+                Text(
+                    text = "Precipitation: ${current.precipType} ${current.precipAmount}",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                Text(
+                    text = "Wind: ${current.windSpeed} KM/h ${current.windDirect}",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+        }
     }
 }
