@@ -54,7 +54,7 @@ fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "${current.temperature}\u00B0C",
+                    text = "${current.tempC}\u00B0C",
                     fontSize = 90.sp,
                     color = Color.White
                 )
@@ -64,26 +64,26 @@ fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
                     modifier = Modifier.padding(top = 1.dp)
                 ) {
                     Text(
-                        text = current.condition,
+                        text = current.conditionText,
                         fontSize = 28.sp,
                         color = Color.White
                     )
                     Image(
-                        painter = painterResource(id = current.image),
-                        contentDescription = current.condition,
+                        painter = painterResource(id = current.icon),
+                        contentDescription = current.conditionText,
                         modifier = Modifier
                             .padding(start = 10.dp)
                             .fillMaxWidth(0.13f)
                     )
                 }
                 Text(
-                    text = "Precipitation: ${current.precipType} ${current.precipAmount}",
+                    text = "Precipitation: ${current.precipType} ${current.precipMm}",
                     fontSize = 20.sp,
                     color = Color.White,
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Text(
-                    text = "Wind: ${current.windSpeed} KM/h ${current.windDirect}",
+                    text = "Wind: ${current.windKph} KM/h ${current.windDir}",
                     fontSize = 20.sp,
                     color = Color.White,
                     modifier = Modifier.padding(top = 6.dp)

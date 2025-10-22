@@ -62,8 +62,8 @@ fun ForecastRow(forecast: Forecast) {
         // Left: icon + date + condition + extra info
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(id = forecast.image),
-                contentDescription = forecast.condition,
+                painter = painterResource(id = forecast.icon),
+                contentDescription = forecast.conditionText,
                 modifier = Modifier
                     .size(40.dp)
                     .padding(end = 12.dp)
@@ -76,18 +76,18 @@ fun ForecastRow(forecast: Forecast) {
                     fontSize = 20.sp
                 )
                 Text(
-                    text = forecast.condition,
+                    text = forecast.conditionText,
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 16.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Precip: ${forecast.precipAmount}mm (${forecast.precipProb}%) ${forecast.precipType}",
+                    text = "Precip: ${forecast.precipMm}mm (${forecast.precipChance}%) ${forecast.precipType}",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Wind: ${forecast.windSpeed} km/h ${forecast.windDirect}",
+                    text = "Wind: ${forecast.windKph} km/h ${forecast.windDir}",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
@@ -96,12 +96,13 @@ fun ForecastRow(forecast: Forecast) {
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
+
             }
         }
 
         // Right: temperatures
         Text(
-            text = "${forecast.tempHigh}\u00B0C / ${forecast.tempLow}\u00B0C",
+            text = "${forecast.maxTempC}\u00B0C / ${forecast.minTempC}\u00B0C",
             color = Color.White,
             fontSize = 20.sp
         )

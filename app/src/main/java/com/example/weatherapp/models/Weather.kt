@@ -1,6 +1,6 @@
 package com.example.weatherapp.models
 
-import android.health.connect.datatypes.units.Temperature
+import com.example.weatherapp.R
 
 data class Weather(
     val current: Current,
@@ -8,25 +8,25 @@ data class Weather(
 )
 
 data class Current(
-    val image: Int,
-    val condition: String,
-    val temperature: Int,
+    val icon: Int,
+    val conditionText: String,
+    val tempC: Double,
     val precipType: String,
-    val precipAmount: Double,
-    val windDirect: String,
-    val windSpeed: Int
+    val precipMm: Double,
+    val windDir: String,
+    val windKph: Double
 )
 
 data class Forecast(
     val date: String,
-    val image: Int,
-    val tempHigh: Int,
-    val tempLow: Int,
-    val condition: String,
+    val icon: Int,
+    val maxTempC: Double,
+    val minTempC: Double,
+    val conditionText: String,
     val precipType: String,
-    val precipAmount: Double,
-    val precipProb: Int,
-    val windDirect: String,
-    val windSpeed: Int,
+    val precipMm: Double,
+    val precipChance: Int,
+    val windDir: String,
+    val windKph: Double,
     val humidity: Int
 )
