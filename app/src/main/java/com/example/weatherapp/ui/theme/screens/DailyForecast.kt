@@ -11,6 +11,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,13 +21,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.weatherapp.models.Forecast
+import com.example.weatherapp.models.ForecastDay
 import com.example.weatherapp.ui.theme.components.BackgroundImage
 import com.example.weatherapp.viewmodel.MainViewModel
 
 @Composable
 fun DailyForecastScreen(mainViewModel: MainViewModel) {
-    val forecastList = mainViewModel.weather.forecast
+    val weather by mainViewModel.weather.collectAsState()
+    val forecastList = mainViewModel.weather.collectAsState().value?.forecast?.forecastDay ?: emptyList()    //val forecastList = mainViewModel.weather.forecast
 
     BackgroundImage()
 
@@ -41,8 +46,8 @@ fun DailyForecastScreen(mainViewModel: MainViewModel) {
            verticalArrangement = Arrangement.spacedBy(24.dp),
            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(forecastList) { forecast ->
-                ForecastRow(forecast)
+            items(forecastList) { forecastDay ->
+                ForecastRow(forecastDay)
             }
         }
 
@@ -50,7 +55,7 @@ fun DailyForecastScreen(mainViewModel: MainViewModel) {
     }
 
 @Composable
-fun ForecastRow(forecast: Forecast) {
+fun ForecastRow(forecastDay: ForecastDay) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,8 +67,8 @@ fun ForecastRow(forecast: Forecast) {
         // Left: icon + date + condition + extra info
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(id = forecast.icon),
-                contentDescription = forecast.conditionText,
+                painter = rememberAsyncImagePainter(forecastDay.day.condition.icon),
+                contentDescription = forecastDay.day.condition.text,
                 modifier = Modifier
                     .size(40.dp)
                     .padding(end = 12.dp)
@@ -71,28 +76,28 @@ fun ForecastRow(forecast: Forecast) {
 
             Column {
                 Text(
-                    text = forecast.date,
+                    text = forecastDay.date,
                     color = Color.White,
                     fontSize = 20.sp
                 )
                 Text(
-                    text = forecast.conditionText,
+                    text = forecastDay.day.condition.text,
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 16.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Precip: ${forecast.precipMm}mm (${forecast.precipChance}%) ${forecast.precipType}",
+                    text = "Precip: ${forecastDay.day.precipMm}mm (${forecastDay.day.rainChance}%)",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Wind: ${forecast.windKph} km/h ${forecast.windDir}",
+                    text = "Wind: ${forecastDay.day.windKph} km/h ${forecastDay.day.hour.windDir}",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Humidity: ${forecast.humidity}%",
+                    text = "Humidity: ${forecastDay.day.hour.humidity}%",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
@@ -102,7 +107,7 @@ fun ForecastRow(forecast: Forecast) {
 
         // Right: temperatures
         Text(
-            text = "${forecast.maxTempC}\u00B0C / ${forecast.minTempC}\u00B0C",
+            text = "${forecastDay.day.maxTempC}\u00B0C / ${forecastDay.day.minTempC}\u00B0C",
             color = Color.White,
             fontSize = 20.sp
         )

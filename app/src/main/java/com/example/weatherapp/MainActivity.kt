@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeatherAppTheme {
                 DisplayUI(mainViewModel)
+
             }
         }
     }
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayUI(mainViewModel: MainViewModel) {
+
     val navController = rememberNavController()
 
     var selectedIndex by remember { mutableIntStateOf(0) }
