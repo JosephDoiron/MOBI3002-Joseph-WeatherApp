@@ -30,7 +30,7 @@ import com.example.weatherapp.viewmodel.MainViewModel
 @Composable
 fun DailyForecastScreen(mainViewModel: MainViewModel) {
     val weather by mainViewModel.weather.collectAsState()
-    val forecastList = mainViewModel.weather.collectAsState().value?.forecast?.forecastDay ?: emptyList()    //val forecastList = mainViewModel.weather.forecast
+    val forecastList = weather?.forecast?.forecastDay ?: emptyList()
 
     BackgroundImage()
 
@@ -56,6 +56,9 @@ fun DailyForecastScreen(mainViewModel: MainViewModel) {
 
 @Composable
 fun ForecastRow(forecastDay: ForecastDay) {
+
+    val middayHour = forecastDay.day.hour.getOrNull(11) // safe, avoids crash if missing
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,7 +70,7 @@ fun ForecastRow(forecastDay: ForecastDay) {
         // Left: icon + date + condition + extra info
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = rememberAsyncImagePainter(forecastDay.day.condition.icon),
+                painter = rememberAsyncImagePainter("https:" + forecastDay.day.condition.icon),
                 contentDescription = forecastDay.day.condition.text,
                 modifier = Modifier
                     .size(40.dp)
@@ -92,12 +95,12 @@ fun ForecastRow(forecastDay: ForecastDay) {
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Wind: ${forecastDay.day.windKph} km/h ${forecastDay.day.hour.windDir}",
+                    text = "Wind: ${forecastDay.day.windKph} km/h ${middayHour?.windDir ?: "N/A"}",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Humidity: ${forecastDay.day.hour.humidity}%",
+                    text = "Humidity: ${middayHour?.humidity ?: "N/A"}%",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )

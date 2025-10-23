@@ -72,7 +72,7 @@ data class Day(
     @SerializedName("maxwind_kph")
     val windKph: Double,
 
-    val hour: Hour
+    val hour: List<Hour>
 )
 
 data class Hour(

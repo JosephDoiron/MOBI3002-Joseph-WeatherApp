@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,31 +41,24 @@ import com.example.weatherapp.viewmodel.MainViewModel
 
 @Composable
 fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
-    val weather by mainViewModel.weather.collectAsState()  // <-- collect the flow
-
-
-
-
-//    val weather = mainViewModel.weather
-//    val current = mainViewModel.weather.current
+    val weather by mainViewModel.weather.collectAsState()
 
     BackgroundImage()
+
     weather?.let { currentWeather ->
         val current = currentWeather.current
 
         Column(
             modifier = Modifier
-                .wrapContentSize()
+                .fillMaxSize()               // fill the screen so centering works
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // This Box groups the temperature and condition together visually
             Box(
                 modifier = Modifier
                     .background(Color.Black.copy(alpha = 0.50f))
-                    .padding(16.dp)
-                    .wrapContentSize(),
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -73,10 +67,11 @@ fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
                         fontSize = 90.sp,
                         color = Color.White
                     )
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(top = 1.dp)
+                        modifier = Modifier.padding(top = 8.dp)
                     ) {
                         Text(
                             text = current.condition.text,
@@ -85,19 +80,21 @@ fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
                         )
 
                         Image(
-                            painter = rememberAsyncImagePainter(current.condition.icon),
-                            contentDescription = current.condition.icon,
+                            painter = rememberAsyncImagePainter("https:" + current.condition.icon),
+                            contentDescription = current.condition.text,
                             modifier = Modifier
                                 .padding(start = 10.dp)
-                                .wrapContentSize()
+                                .size(64.dp)       // give the image a visible size
                         )
                     }
+
                     Text(
-                        text = "Precipitation: ${current.precipMm}",
+                        text = "Precipitation: ${current.precipMm} mm",
                         fontSize = 20.sp,
                         color = Color.White,
                         modifier = Modifier.padding(top = 8.dp)
                     )
+
                     Text(
                         text = "Wind: ${current.windKph} KM/h ${current.windDir}",
                         fontSize = 20.sp,
