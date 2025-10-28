@@ -88,6 +88,8 @@ fun DisplayUI(mainViewModel: MainViewModel) {
                     val country = weather?.location?.country ?: ""
                     Text(text = buildString{
                         append(locationName)
+                        if(region.isNotEmpty()) append(", $region")
+                        if(country.isNotEmpty()) append(", $country")
                     }) //Variable Text Here
                 }
 

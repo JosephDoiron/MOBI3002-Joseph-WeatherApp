@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.CardDefaults
 import coil.compose.AsyncImage
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -58,7 +59,9 @@ fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
         ) {
             Box(
                 modifier = Modifier
-                    .background(Color.Black.copy(alpha = 0.50f))
+                    .background(
+                        Color.Black.copy(alpha = 0.50f),
+                        )
                     .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
