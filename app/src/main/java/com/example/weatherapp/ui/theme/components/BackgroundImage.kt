@@ -11,7 +11,7 @@ import androidx.compose.ui.res.painterResource
 import com.example.weatherapp.R
 
 @Composable
-fun BackgroundImage(
+fun BackgroundImage(  //Idea: Have function that looks at condition then sets background image to sunny, cloudy, or rain, or night.
     modifier: Modifier = Modifier,
     imageRes: Int = R.drawable.sunclouds,
     alpha: Float = 0.75f

@@ -33,6 +33,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DailyForecastScreen(mainViewModel: MainViewModel) {
     val weather by mainViewModel.weather.collectAsState()
@@ -63,6 +64,7 @@ fun DailyForecastScreen(mainViewModel: MainViewModel) {
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ForecastRow(forecastDay: ForecastDay) {
     val displayHour = forecastDay.day.hour?.firstOrNull()
@@ -86,7 +88,7 @@ fun ForecastRow(forecastDay: ForecastDay) {
             )
 
             Column {
-                Text(forecastDay.date, color = Color.White, fontSize = 20.sp)
+                Text(getDayOfWeek(forecastDay.date), color = Color.White, fontSize = 20.sp)
                 Text(forecastDay.day.condition.text,
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 16.sp)
@@ -107,4 +109,12 @@ fun ForecastRow(forecastDay: ForecastDay) {
             color = Color.White,
             fontSize = 20.sp)
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getDayOfWeek(dateString: String): String {
+    // Parse the API date
+    val date = LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE)
+    // Return the day of the week in full (Monday, Tuesday, ...)
+    return date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
 }
