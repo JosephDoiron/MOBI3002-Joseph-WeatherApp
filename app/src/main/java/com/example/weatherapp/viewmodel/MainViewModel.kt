@@ -2,7 +2,7 @@ package com.example.weatherapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.R
+//import com.example.weatherapp.R
 import com.example.weatherapp.models.Current
 import com.example.weatherapp.models.Forecast
 import com.example.weatherapp.models.Weather
@@ -28,12 +28,12 @@ class MainViewModel : ViewModel() {
 
     private val service = retrofit.create(WeatherService::class.java)
 
-    init {
-        fetchWeather()  // fetch default location on startup
-    }
+//    init {
+//        fetchWeather()  // fetch default location on startup
+//    }
 
 
-    fun fetchWeather(location: String = "B4C1G2") {
+    fun fetchWeather(location: String) {
         viewModelScope.launch {
             try {
                 val response: Weather = service.getWeather(

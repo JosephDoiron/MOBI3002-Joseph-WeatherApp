@@ -1,5 +1,7 @@
 package com.example.weatherapp.ui.theme.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.weatherapp.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,11 +28,16 @@ import com.example.weatherapp.models.Forecast
 import com.example.weatherapp.models.ForecastDay
 import com.example.weatherapp.ui.theme.components.BackgroundImage
 import com.example.weatherapp.viewmodel.MainViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun DailyForecastScreen(mainViewModel: MainViewModel) {
     val weather by mainViewModel.weather.collectAsState()
     val forecastList = weather?.forecast?.forecastDay ?: emptyList()
+
 
     BackgroundImage()
 
@@ -54,10 +61,12 @@ fun DailyForecastScreen(mainViewModel: MainViewModel) {
     }
     }
 
+
+
 @Composable
 fun ForecastRow(forecastDay: ForecastDay) {
+    val displayHour = forecastDay.day.hour?.firstOrNull()
 
-    val middayHour = forecastDay.day.hour.getOrNull(11) // safe, avoids crash if missing
 
     Row(
         modifier = Modifier
@@ -67,7 +76,6 @@ fun ForecastRow(forecastDay: ForecastDay) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Left: icon + date + condition + extra info
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = rememberAsyncImagePainter("https:" + forecastDay.day.condition.icon),
@@ -78,41 +86,25 @@ fun ForecastRow(forecastDay: ForecastDay) {
             )
 
             Column {
-                Text(
-                    text = forecastDay.date,
-                    color = Color.White,
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = forecastDay.day.condition.text,
+                Text(forecastDay.date, color = Color.White, fontSize = 20.sp)
+                Text(forecastDay.day.condition.text,
                     color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 16.sp
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Precip: ${forecastDay.day.precipMm}mm (${forecastDay.day.rainChance}%)",
+                    fontSize = 16.sp)
+                Spacer(Modifier.height(4.dp))
+                Text("Precip: ${forecastDay.day.precipMm}mm (${forecastDay.day.rainChance}%)",
                     color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = "Wind: ${forecastDay.day.windKph} km/h ${middayHour?.windDir ?: "N/A"}",
+                    fontSize = 14.sp)
+                Text("Wind: ${forecastDay.day.windKph} km/h ${displayHour?.windDir ?: "N/A"}",
                     color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = "Humidity: ${middayHour?.humidity ?: "N/A"}%",
+                    fontSize = 14.sp)
+                Text("Humidity: ${displayHour?.humidity ?: "N/A"}%",
                     color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp
-                )
-
+                    fontSize = 14.sp)
             }
         }
 
-        // Right: temperatures
-        Text(
-            text = "${forecastDay.day.maxTempC}\u00B0C / ${forecastDay.day.minTempC}\u00B0C",
+        Text("${forecastDay.day.maxTempC}\u00B0C / ${forecastDay.day.minTempC}\u00B0C",
             color = Color.White,
-            fontSize = 20.sp
-        )
+            fontSize = 20.sp)
     }
 }

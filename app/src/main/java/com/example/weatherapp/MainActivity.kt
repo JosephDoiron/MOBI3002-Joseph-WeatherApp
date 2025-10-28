@@ -1,7 +1,10 @@
 package com.example.weatherapp
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -32,7 +35,17 @@ import com.example.weatherapp.ui.theme.screens.DailyForecastScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import com.example.weatherapp.viewmodel.MainViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 
 
 class MainActivity : ComponentActivity() {
@@ -43,7 +56,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
+                GetLocation{ coordinates -> mainViewModel.fetchWeather(coordinates)}
                 DisplayUI(mainViewModel)
+
 
             }
         }
@@ -58,6 +73,8 @@ fun DisplayUI(mainViewModel: MainViewModel) {
 
     var selectedIndex by remember { mutableIntStateOf(0) }
 
+    val weather by mainViewModel.weather.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -66,7 +83,12 @@ fun DisplayUI(mainViewModel: MainViewModel) {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 title = {
-                    Text("Halifax, Nova Scotia") //Variable Text Here
+                    val locationName = weather?.location?.name ?: "Loading..."
+                    val region = weather?.location?.region ?: ""
+                    val country = weather?.location?.country ?: ""
+                    Text(text = buildString{
+                        append(locationName)
+                    }) //Variable Text Here
                 }
 
             )
@@ -132,4 +154,54 @@ fun DisplayUI(mainViewModel: MainViewModel) {
         }
     }
 
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun GetLocation(onLocationFound: (String) -> Unit) {
+    // Remember the permission state(asking for Fine location)
+    val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+
+    if (permissionState.status.isGranted) {
+        Log.i("TESTING", "Hurray, permission granted!")
+
+        // Get Location
+        val currentContext = LocalContext.current
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(currentContext)
+
+        if (ContextCompat.checkSelfPermission(
+                currentContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED)
+        {
+            val cancellationTokenSource = CancellationTokenSource()
+
+            Log.i("TESTING", "Requesting location...")
+
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.token)
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        val lat = location.latitude.toString()
+                        val lng = location.longitude.toString()
+
+                        Log.i("TESTING", "Success: $lat $lng")
+
+                        val coordinates = "$lat,$lng"
+
+                        // call a function, like in View Model, to do something with location...
+                        // 👇 Call the callback and send the coordinates
+                        onLocationFound(coordinates)
+                    }
+                    else {
+                        Log.i("TESTING", "Problem encountered: Location returned null")
+                    }
+                }
+        }
+    }
+    else {
+        // Run a side-effect (coroutine) to get permission. The permission popup.
+        LaunchedEffect(permissionState){
+            permissionState.launchPermissionRequest()
+        }
+    }
 }

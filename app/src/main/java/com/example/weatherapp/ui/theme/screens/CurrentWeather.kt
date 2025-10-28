@@ -47,6 +47,7 @@ fun CurrentWeatherScreen(mainViewModel: MainViewModel) {
 
     weather?.let { currentWeather ->
         val current = currentWeather.current
+        val location = currentWeather.location
 
         Column(
             modifier = Modifier

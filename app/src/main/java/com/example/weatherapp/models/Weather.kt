@@ -11,6 +11,7 @@ data class Weather(
 
 data class Location(
     val name: String,
+    val region: String,
     val country: String,
     val localtime: String
 )
@@ -72,7 +73,8 @@ data class Day(
     @SerializedName("maxwind_kph")
     val windKph: Double,
 
-    val hour: List<Hour>
+    @SerializedName("hour")
+    val hour: List<Hour>?
 )
 
 data class Hour(
