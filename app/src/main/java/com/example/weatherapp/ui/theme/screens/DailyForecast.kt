@@ -67,8 +67,6 @@ fun DailyForecastScreen(mainViewModel: MainViewModel) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ForecastRow(forecastDay: ForecastDay) {
-    val displayHour = forecastDay.day.hour?.firstOrNull()
-
 
     Row(
         modifier = Modifier
@@ -96,10 +94,10 @@ fun ForecastRow(forecastDay: ForecastDay) {
                 Text("Precip: ${forecastDay.day.precipMm}mm (${forecastDay.day.rainChance}%)",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp)
-                Text("Wind: ${forecastDay.day.windKph} km/h ${displayHour?.windDir ?: "N/A"}",
+                Text("Wind: ${forecastDay.day.windKph} km/h}",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp)
-                Text("Humidity: ${displayHour?.humidity ?: "N/A"}%",
+                Text("Humidity: ${forecastDay.day.humidity}%",
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp)
             }

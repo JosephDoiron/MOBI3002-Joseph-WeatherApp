@@ -73,17 +73,9 @@ data class Day(
     @SerializedName("maxwind_kph")
     val windKph: Double,
 
-    @SerializedName("hour")
-    val hour: List<Hour>?
-)
-
-data class Hour(
-    @SerializedName("wind_dir")
-    val windDir: String,
-
+    @SerializedName("avghumidity")
     val humidity: Int
 )
-
 data class Condition(
     @SerializedName("text")val text: String,
     val icon: String
